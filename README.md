@@ -1,6 +1,8 @@
 
 # resolvconf
 
+[![Build Status](https://travis-ci.org/suchpuppet/puppet-resolvconf.svg?branch=master)](https://travis-ci.org/suchpuppet/puppet-resolvconf)
+
 #### Table of Contents
 
 1. [Description](#description)
