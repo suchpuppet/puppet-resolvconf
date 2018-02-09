@@ -1,0 +1,8 @@
+# Managed with Puppet.
+search <%= @domains.join(' ') %>
+<% if @use_local == true -%>
+nameserver 127.0.0.1
+<% end -%>
+<% @nameservers.each do |nameserver| -%>
+nameserver <%= nameserver %>
+<% end -%>
