@@ -1,0 +1,2 @@
+---
+resolvconf::template_file: '/etc/resolv.conf'
