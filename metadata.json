@@ -1,12 +1,12 @@
 {
-  "name": "sbrimhall-resolvconf",
+  "name": "suchpuppet-resolvconf",
   "version": "0.1.0",
   "author": "Scott Brimhall",
   "summary": "Module for managing resolv.conf on Debian & RedHat based systems",
   "license": "MIT",
-  "source": "https://gitlab.com/suchpuppet/puppet-resolvconf",
-  "project_page": "https://gitlab.com/suchpuppet/puppet-resolvconf",
-  "issues_url": "https://gitlab.com/suchpuppet/puppet-resolvconf/issues",
+  "source": "https://github.com/suchpuppet/puppet-resolvconf",
+  "project_page": "https://github.com/suchpuppet/puppet-resolvconf",
+  "issues_url": "https://github.com/suchpuppet/puppet-resolvconf/issues",
   "dependencies": [
 
   ],
