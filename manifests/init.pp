@@ -6,6 +6,18 @@
 #
 # @example
 #   include resolvconf
+#
+# @param template_file
+#   The absolute path to the resolvconf template file to manage
+#
+# @param nameservers
+#   Array containing the nameservers to put in resolv.conf
+#
+# @param domains
+#   The domains to include in the search line in resolv.conf
+#
+# @param use_local
+#   Use 127.0.0.1 as the resolver if using dnsmasq or similar
 class resolvconf (
   String  $template_file,
   Array[Variant[String, Float], 1] $nameservers,
