@@ -9,10 +9,12 @@ describe 'resolvconf::service' do
 
       case os_facts[:osfamily]
       when 'Debian'
-        it { is_expected.to contain_service('resolvconf').with({
-          'ensure' => 'running',
-          'enable' => 'true',
-        }) }
+        it {
+          is_expected.to contain_service('resolvconf').with(
+            'ensure' => 'running',
+            'enable' => 'true',
+          )
+        }
       end
     end
   end
