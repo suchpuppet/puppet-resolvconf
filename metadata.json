@@ -1,6 +1,6 @@
 {
   "name": "suchpuppet-resolvconf",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "author": "Scott Brimhall",
   "summary": "Module for managing resolv.conf on Debian & RedHat based systems",
   "license": "MIT",
@@ -44,20 +44,26 @@
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "14.04"
+        "16.04"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "16.04"
+        "18.04"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "20.04"
       ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.9.0 < 6.0.0"
+      "version_requirement": ">= 4.9.0 < 7.0.0"
     }
   ],
   "pdk-version": "1.18.1",
