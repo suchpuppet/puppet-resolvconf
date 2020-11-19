@@ -1,6 +1,6 @@
 {
   "name": "suchpuppet-resolvconf",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "author": "Scott Brimhall",
   "summary": "Module for managing resolv.conf on Debian & RedHat based systems",
   "license": "MIT",
