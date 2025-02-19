@@ -2,17 +2,19 @@
 #
 # A description of what this class does
 #
-# @summary Class for managing rebuilding the resolv.conf on debian systems
+# @summary Class for managing the systemd-resolved service
 #
-class resolvconf::service {
-  include ::resolvconf::config
+# @param use_systemd_resolved [Boolean] Determine if systemd-resolved should be used
+class resolvconf::service (
+  Boolean $use_systemd_resolved = $resolvconf::use_systemd_resolved,
+) inherits resolvconf {
+  include resolvconf::config
 
-  if $facts['os']['family'] == 'Debian' {
-    # Rebuild resolv.conf when the template files change.
-    service { 'resolvconf':
+  if $use_systemd_resolved {
+    service { 'systemd-resolved':
       ensure    => 'running',
       enable    => true,
-      subscribe => Class['::resolvconf::config']
+      subscribe => Class['resolvconf::config'],
     }
   }
 }

@@ -1,2 +1,0 @@
----
-resolvconf::template_file: '/etc/resolvconf/resolv.conf.d/tail'

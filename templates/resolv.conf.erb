@@ -1,8 +1,9 @@
-# Managed with Puppet.
+# Managed with Puppet. Resistance if futile.
 search <%= @domains.join(' ') %>
 <% if @use_local == true -%>
 nameserver 127.0.0.1
 <% end -%>
-<% @nameservers.each do |nameserver| -%>
-nameserver <%= nameserver %>
+<% @dns.each do |dns| -%>
+nameserver <%= dns %>
 <% end -%>
+options <%= @options.join (' ') %>
