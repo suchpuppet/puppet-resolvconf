@@ -12,10 +12,12 @@ describe 'resolvconf' do
       it { is_expected.to contain_class('resolvconf::service') }
 
       if os_facts[:os]['distro']['id'] == 'Ubuntu' && os_facts[:os]['distro']['release']['major'].to_i >= 24
-        it { is_expected.to contain_service('systemd-resolved').with(
-          'ensure' => 'running',
-          'enable' => true,
-        ) }
+        it {
+          is_expected.to contain_service('systemd-resolved').with(
+            'ensure' => 'running',
+            'enable' => true,
+          )
+        }
       end
     end
   end

@@ -40,7 +40,7 @@ describe 'resolvconf::config' do
 
     context "on #{os} with use_systemd_resolved => false, use_local => false, options => ['ndots:5']" do
       let(:facts) { os_facts }
-      let(:params) {{ use_systemd_resolved: false, use_local: false, options: ['ndots:5'] }}
+      let(:params) { { use_systemd_resolved: false, use_local: false, options: ['ndots:5'] } }
       let(:hiera_config) { 'hiera.yaml' }
 
       it { is_expected.to compile.with_all_deps }
