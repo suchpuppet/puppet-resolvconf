@@ -13,15 +13,22 @@
   "operatingsystem_support": [
     {
       "operatingsystem": "CentOS",
-      "operatingsystemrelease": ["8"]
+      "operatingsystemrelease": [
+        "8"
+      ]
     },
     {
       "operatingsystem": "RedHat",
-      "operatingsystemrelease": ["9"]
+      "operatingsystemrelease": [
+        "9"
+      ]
     },
     {
       "operatingsystem": "Ubuntu",
-      "operatingsystemrelease": ["22.04", "24.04"]
+      "operatingsystemrelease": [
+        "22.04",
+        "24.04"
+      ]
     }
   ],
   "requirements": [
