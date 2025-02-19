@@ -1,41 +1,70 @@
 # resolvconf::config
+# @summary Class to configure the resolv.conf file. This class should not be called directly.
 #
-# Class to configure the resolv.conf file
+# @param use_systemd_resolved [Boolean]
+#  Use systemd-resolved for managing resolv.conf
 #
-class resolvconf::config {
-  include ::resolvconf
-  $nameservers   = $::resolvconf::nameservers
-  $domains       = $::resolvconf::domains
-  $template_file = $::resolvconf::template_file
-  $use_local     = $::resolvconf::use_local
-
-  if $facts['os']['family'] == 'Debian' {
-    require ::resolvconf::install
-
-    $resolvconf_dirs = [ '/etc/resolvconf', '/etc/resolvconf/resolv.conf.d']
-
-    $resolvconf_dirs.each |String $name| {
-      file { $name:
-        ensure => 'directory',
-        owner  => 'root',
-        group  => 'root',
-        mode   => '0755',
-      }
-    }
+# @param use_local [Boolean]
+#  Use local DNS resolver
+#
+# @param dns [Array[Variant[String, Float], 1]]
+#  List of DNS servers
+#
+# @param fallback_dns [Array[Variant[String, Float]]
+#  List of fallback DNS servers
+#
+# @param dns_stub_listener_extra [Array[Variant[String, Float]]
+#  Extra DNS stub listener options
+#
+# @param domains [Array[String, 1]]
+#  List of search domains
+#
+# @param options [Array[String]]
+#  List of resolver options to add to resolv.conf
+class resolvconf::config (
+  Array[Variant[String, Float], 1] $dns = $resolvconf::dns,
+  Array[String, 1] $domains = $resolvconf::domains,
+  Boolean $use_systemd_resolved = $resolvconf::use_systemd_resolved,
+  Boolean $use_local            = $resolvconf::use_local,
+  Array[Variant[String, Float]] $fallback_dns = $resolvconf::fallback_dns,
+  Array[Variant[String, Float]] $dns_stub_listener_extra = $resolvconf::dns_stub_listener_extra,
+  Array[String] $options = $resolvconf::options,
+) inherits resolvconf {
+  if $use_systemd_resolved {
+    require resolvconf::install
+    include resolvconf::service
 
     file { '/etc/resolv.conf':
       ensure => 'symlink',
-      target => '/var/run/resolvconf/resolv.conf',
+      target => '/run/systemd/resolve/stub-resolv.conf',
+      force  => true,
       owner  => 'root',
       group  => 'root',
+      notify => Class['resolvconf::service'],
     }
-  }
 
-  file { $template_file:
-    ensure  => 'file',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    content => template('resolvconf/resolv.conf.erb')
+    file { '/etc/systemd/resolved.conf.d':
+      ensure => directory,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0755',
+      before => File['/etc/systemd/resolved.conf.d/puppet.conf'],
+    }
+
+    file { '/etc/systemd/resolved.conf.d/puppet.conf':
+      ensure  => 'file',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => template('resolvconf/resolv.conf.puppet.erb'),
+    }
+  } else {
+    file { '/etc/resolv.conf':
+      ensure  => 'file',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => template('resolvconf/resolv.conf.erb'),
+    }
   }
 }

@@ -1,0 +1,10 @@
+[Resolve]
+DNS=<%= @dns.join(' ') %>
+Domains=<%= @domains.join(' ') %>
+<% if @fallback_dns -%>
+FallbackDNS=<%= @fallback_dns.join(' ') %>
+<% end -%>
+DNSStubListener=<%= @use_local ? 'yes' : 'no' %>
+<% if @dns_stub_listener_extra -%>
+DNSStubListenerExtra=<%= @dns_stub_listener_extra.join(' ') %>
+<% end -%>
