@@ -6,7 +6,7 @@
 <title>
   File: README
   
-    &mdash; Documentation by YARD 0.9.25
+    &mdash; Documentation by YARD 0.9.36
   
 </title>
 
@@ -60,46 +60,39 @@
       <div id="content"><div id='filecontents'>
 <h1 id="label-resolvconf">resolvconf</h1>
 
-<p><a href="https://travis-ci.org/suchpuppet/puppet-resolvconf"><img
-src="https://travis-ci.org/suchpuppet/puppet-resolvconf.svg?branch=master"></a></p>
+<p><a href="https://travis-ci.org/suchpuppet/puppet-resolvconf"><img src="https://travis-ci.org/suchpuppet/puppet-resolvconf.svg?branch=master"></a></p>
 
 <h4 id="label-Table+of+Contents">Table of Contents</h4>
 <ol><li>
-<p><a href="#label-Description">Description</a></p>
+<p><a href="#description">Description</a></p>
 </li><li>
-<p><a href="#label-Setup">Setup - The basics of getting started with resolvconf</a></p>
+<p><a href="#setup">Setup - The basics of getting started with resolvconf</a></p>
 <ul><li>
-<p><a href="#label-Beginning+with+resolvconf">Beginning with resolvconf</a></p>
+<p><a href="#beginning-with-resolvconf">Beginning with resolvconf</a></p>
 </li></ul>
 </li><li>
-<p><a href="#label-Usage">Usage - Configuration options and additional
-functionality</a></p>
+<p><a href="#usage">Usage - Configuration options and additional functionality</a></p>
 </li><li>
-<p><a href="#label-Reference">Reference - An under-the-hood peek at what the module
-is doing and how</a></p>
+<p><a href="#reference">Reference - An under-the-hood peek at what the module is doing and how</a></p>
 </li><li>
-<p><a href="#label-Limitations">Limitations - OS compatibility, etc.</a></p>
+<p><a href="#limitations">Limitations - OS compatibility, etc.</a></p>
 </li><li>
-<p><a href="#label-Development">Development - Guide for contributing to the
-module</a></p>
+<p><a href="#development">Development - Guide for contributing to the module</a></p>
 </li></ol>
 
 <h2 id="label-Description">Description</h2>
 
-<p>Module for managing resolv.conf on RedHat and Debian based systems</p>
+<p>Module for managing resolv.conf on RedHat and Ubuntu based systems</p>
 
 <h2 id="label-Setup">Setup</h2>
 
 <h3 id="label-Beginning+with+resolvconf">Beginning with resolvconf</h3>
 
-<p><code>include resolvconf</code> is enough to get you up and running with
-the module if you would like a default setup using Google’s resolvers and
-the <code>$::domain</code> fact as the search domain.</p>
+<p><code>include resolvconf</code> is enough to get you up and running with the module if you would like a default setup using Google’s resolvers and the <code>$::domain</code> fact as the search domain.</p>
 
 <h2 id="label-Usage">Usage</h2>
 
-<p>All parameters are available in the main resolvconf class. See the common
-usages below for examples.</p>
+<p>All parameters are available in the main resolvconf class. See the common usages below for examples.</p>
 
 <h3 id="label-Configure+a+default+resolv.conf+with+Google+nameservers+as+the+-24-3A-3Adomain+fact+as+the+search+path">Configure a default resolv.conf with Google nameservers as the <code>$::domain</code> fact as the search path</h3>
 
@@ -108,15 +101,15 @@ usages below for examples.</p>
 <h3 id="label-Pass+in+parameters+for+which+nameservers+to+use">Pass in parameters for which nameservers to use</h3>
 
 <pre class="code ruby"><code class="ruby">class { ‘::resolvconf’:
-  nameservers =&gt; [‘8.8.8.8’, ‘8.8.4.4’],
+  dns =&gt; [‘8.8.8.8’, ‘1.1.1.1’],
 }
 </code></pre>
 
 <h3 id="label-Pass+in+nameservers+plus+domains+for+the+search+path">Pass in nameservers plus domains for the search path</h3>
 
 <pre class="code ruby"><code class="ruby">class { ‘::resolvconf’:
-  nameservers =&gt; [‘8.8.8.8’, ‘8.8.4.4’],
-  domains     =&gt; [‘domain.tld’, ‘sub.domain.tld’],
+  dns     =&gt; [‘8.8.8.8’, ‘8.8.4.4’],
+  domains =&gt; [‘domain.tld’, ‘sub.domain.tld’],
 }
 </code></pre>
 
@@ -133,22 +126,20 @@ usages below for examples.</p>
 <ul><li>
 <p>resolvconf::config: Handles the configuration of resolv.conf</p>
 </li><li>
-<p>resolvconf::service: Handles the resolvconf service for debian based
-systems</p>
+<p>resolvconf::service: Handles the resolvconf service for debian based systems</p>
 </li><li>
 <p>resolvconf::install: Handles package installation for debian based systems</p>
 </li></ul>
 
 <h3 id="label-Parameters">Parameters</h3>
 
-<p><code>nameservers</code></p>
+<p><code>dns</code></p>
 
 <p>Optional.</p>
 
 <p>Data type: Array</p>
 
-<p>Allows you to specify an array of nameservers to use in resolv.conf.
-Default value: <code>[‘8.8.8.8’, ‘8.8.4.4’]</code></p>
+<p>Allows you to specify an array of nameservers to use in resolv.conf. Default value: <code>[‘8.8.8.8’, ‘1.1.1.1’]</code></p>
 
 <p><code>domains</code></p>
 
@@ -156,8 +147,7 @@ Default value: <code>[‘8.8.8.8’, ‘8.8.4.4’]</code></p>
 
 <p>Data type: Array</p>
 
-<p>Allows you to specify an array of domains to include in the search path in
-resolv.conf. Default value: <code>[$::domain]</code></p>
+<p>Allows you to specify an array of domains to include in the search path in resolv.conf. Default value: <code>[$::domain]</code></p>
 
 <p><code>use_local</code></p>
 
@@ -165,22 +155,31 @@ resolv.conf. Default value: <code>[$::domain]</code></p>
 
 <p>Data type: Boolean</p>
 
-<p>Allows you to use a local nameserver such as named/bind. Will set a
-nameserver entry of 127.0.0.1 as the first entry in resolv.conf. Default
-value: <code>false</code></p>
+<p>Allows you to use a local nameserver such as named/bind. Will set a nameserver entry of 127.0.0.1 as the first entry in resolv.conf if not using systemd-resolved. Will set 127.0.0.53 if using systemd-resolved. Default value: <code>true</code></p>
+
+<p><code>fallback_dns</code></p>
+
+<p>Optional.</p>
+
+<p>Data type: Array</p>
+
+<p>Specify additional fallback nameservers to use in systemd-resolved configuration. Default value is an empty array.</p>
+
+<p><code>options</code></p>
+
+<p>Optional.</p>
+
+<p>Specify options to place in /etc/resolv.conf such as ndots:5. Default value is an empty array. Only usable when use_systemd_resolved is <code>false</code> as systemd-resolved does not support configuring options.</p>
 
 <h2 id="label-Limitations">Limitations</h2>
 
-<p>This module has only been tested on the following distros: * Ubuntu  *
-Trusty  * Xenial * Debian  * Jessie  * Stretch * CentOS 7</p>
+<p>This module has only been tested on the following distros: * Ubuntu  * 22.04  * 24.04 * CentOS 8 * RHEL 9</p>
 
-<p>This module uses a custom Hiera 5 backend and requires at least Puppet 4.9
-due to this.</p>
+<p>This module uses a custom Hiera 5 backend and requires at least Puppet 4.9 due to this.</p>
 
 <h2 id="label-Development">Development</h2>
 
-<p>If you would like to contribute to the module, fork it and create a pull
-request when you&#39;re satisfied with your changes.</p>
+<p>If you would like to contribute to the module, fork it and create a pull request when you’re satisfied with your changes.</p>
 </div></div>
 
       <div id="footer">

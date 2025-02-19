@@ -6,7 +6,7 @@
 <title>
   Puppet Class: resolvconf::config
   
-    &mdash; Documentation by YARD 0.9.25
+    &mdash; Documentation by YARD 0.9.36
   
 </title>
 
@@ -62,6 +62,11 @@
       <div id="content"><h1>Puppet Class: resolvconf::config</h1>
 <div class="box_info">
   
+  <dl>
+    <dt>Inherits:</dt>
+    <dd><span class='object_link'><a href="resolvconf.html" title="puppet_classes::resolvconf (puppet_class)">resolvconf</a></span></dd>
+  </dl>
+  
   
   <dl>
     <dt>Defined in:</dt>
@@ -71,20 +76,152 @@
   </dl>
 </div>
 
+  <h2>Summary</h2>
+  Class to configure the resolv.conf file. This class should not be called directly.
+
 <h2>Overview</h2>
 <div class="docstring">
   <div class="discussion">
     
 <p>resolvconf::config</p>
 
-<p>Class to configure the resolv.conf file</p>
-
   </div>
 </div>
 
 
+
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>use_systemd_resolved</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$resolvconf::use_systemd_resolved</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Use systemd-resolved for managing resolv.conf</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>use_local</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$resolvconf::use_local</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Use local DNS resolver</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>dns</span>
+      
+      
+        <span class='type'>(<tt>Array[Variant[String, Float], 1]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$resolvconf::dns</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>List of DNS servers</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>fallback_dns</span>
+      
+      
+        <span class='type'>(<tt>Array[Variant[String, Float]]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$resolvconf::fallback_dns</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>allback_dns [Array[Variant[String, Float]] List of fallback DNS servers</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>dns_stub_listener_extra</span>
+      
+      
+        <span class='type'>(<tt>Array[Variant[String, Float]]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$resolvconf::dns_stub_listener_extra</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>ns_stub_listener_extra [Array[Variant[String, Float]] Extra DNS stub listener options</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>domains</span>
+      
+      
+        <span class='type'>(<tt>Array[String, 1]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$resolvconf::domains</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>List of search domains</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>options</span>
+      
+      
+        <span class='type'>(<tt>Array[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$resolvconf::options</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>List of resolver options to add to resolv.conf</p>
+</div>
+      
+    </li>
+  
+</ul>
+
 
 
 </div><div class="method_details_list">
@@ -94,25 +231,6 @@
         <pre class="lines">
 
 
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
 24
 25
 26
@@ -130,46 +248,85 @@
 38
 39
 40
-41</pre>
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/config.pp', line 5</span>
+        <pre class="code"><span class="info file"># File 'manifests/config.pp', line 24</span>
 
-class resolvconf::config {
-  include ::resolvconf
-  $nameservers   = $::resolvconf::nameservers
-  $domains       = $::resolvconf::domains
-  $template_file = $::resolvconf::template_file
-  $use_local     = $::resolvconf::use_local
-
-  if $facts[&#39;os&#39;][&#39;family&#39;] == &#39;Debian&#39; {
-    require ::resolvconf::install
-
-    $resolvconf_dirs = [ &#39;/etc/resolvconf&#39;, &#39;/etc/resolvconf/resolv.conf.d&#39;]
-
-    $resolvconf_dirs.each |String $name| {
-      file { $name:
-        ensure =&gt; &#39;directory&#39;,
-        owner  =&gt; &#39;root&#39;,
-        group  =&gt; &#39;root&#39;,
-        mode   =&gt; &#39;0755&#39;,
-      }
-    }
+class resolvconf::config (
+  Array[Variant[String, Float], 1] $dns = $resolvconf::dns,
+  Array[String, 1] $domains = $resolvconf::domains,
+  Boolean $use_systemd_resolved = $resolvconf::use_systemd_resolved,
+  Boolean $use_local            = $resolvconf::use_local,
+  Array[Variant[String, Float]] $fallback_dns = $resolvconf::fallback_dns,
+  Array[Variant[String, Float]] $dns_stub_listener_extra = $resolvconf::dns_stub_listener_extra,
+  Array[String] $options = $resolvconf::options,
+) inherits resolvconf {
+  if $use_systemd_resolved {
+    require resolvconf::install
+    include resolvconf::service
 
     file { &#39;/etc/resolv.conf&#39;:
       ensure =&gt; &#39;symlink&#39;,
-      target =&gt; &#39;/var/run/resolvconf/resolv.conf&#39;,
+      target =&gt; &#39;/run/systemd/resolve/stub-resolv.conf&#39;,
+      force  =&gt; true,
       owner  =&gt; &#39;root&#39;,
       group  =&gt; &#39;root&#39;,
+      notify =&gt; Class[&#39;resolvconf::service&#39;],
     }
-  }
 
-  file { $template_file:
-    ensure  =&gt; &#39;file&#39;,
-    owner   =&gt; &#39;root&#39;,
-    group   =&gt; &#39;root&#39;,
-    mode    =&gt; &#39;0644&#39;,
-    content =&gt; template(&#39;resolvconf/resolv.conf.erb&#39;)
+    file { &#39;/etc/systemd/resolved.conf.d&#39;:
+      ensure =&gt; directory,
+      owner  =&gt; &#39;root&#39;,
+      group  =&gt; &#39;root&#39;,
+      mode   =&gt; &#39;0755&#39;,
+      before =&gt; File[&#39;/etc/systemd/resolved.conf.d/puppet.conf&#39;],
+    }
+
+    file { &#39;/etc/systemd/resolved.conf.d/puppet.conf&#39;:
+      ensure  =&gt; &#39;file&#39;,
+      owner   =&gt; &#39;root&#39;,
+      group   =&gt; &#39;root&#39;,
+      mode    =&gt; &#39;0644&#39;,
+      content =&gt; template(&#39;resolvconf/resolv.conf.puppet.erb&#39;),
+    }
+  } else {
+    file { &#39;/etc/resolv.conf&#39;:
+      ensure  =&gt; &#39;file&#39;,
+      owner   =&gt; &#39;root&#39;,
+      group   =&gt; &#39;root&#39;,
+      mode    =&gt; &#39;0644&#39;,
+      content =&gt; template(&#39;resolvconf/resolv.conf.erb&#39;),
+    }
   }
 }</pre>
       </td>

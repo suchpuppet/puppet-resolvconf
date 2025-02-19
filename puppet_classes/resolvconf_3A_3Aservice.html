@@ -6,7 +6,7 @@
 <title>
   Puppet Class: resolvconf::service
   
-    &mdash; Documentation by YARD 0.9.25
+    &mdash; Documentation by YARD 0.9.36
   
 </title>
 
@@ -62,6 +62,11 @@
       <div id="content"><h1>Puppet Class: resolvconf::service</h1>
 <div class="box_info">
   
+  <dl>
+    <dt>Inherits:</dt>
+    <dd><span class='object_link'><a href="resolvconf.html" title="puppet_classes::resolvconf (puppet_class)">resolvconf</a></span></dd>
+  </dl>
+  
   
   <dl>
     <dt>Defined in:</dt>
@@ -72,7 +77,7 @@
 </div>
 
   <h2>Summary</h2>
-  Class for managing rebuilding the resolv.conf on debian systems
+  Class for managing the systemd-resolved service
 
 <h2>Overview</h2>
 <div class="docstring">
@@ -86,8 +91,31 @@
 </div>
 
 
+
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>use_systemd_resolved</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$resolvconf::use_systemd_resolved</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Determine if systemd-resolved should be used</p>
+</div>
+      
+    </li>
+  
+</ul>
+
 
 
 </div><div class="method_details_list">
@@ -97,7 +125,6 @@
         <pre class="lines">
 
 
-7
 8
 9
 10
@@ -108,20 +135,23 @@
 15
 16
 17
-18</pre>
+18
+19
+20</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/service.pp', line 7</span>
+        <pre class="code"><span class="info file"># File 'manifests/service.pp', line 8</span>
 
-class resolvconf::service {
-  include ::resolvconf::config
+class resolvconf::service (
+  Boolean $use_systemd_resolved = $resolvconf::use_systemd_resolved,
+) inherits resolvconf {
+  include resolvconf::config
 
-  if $facts[&#39;os&#39;][&#39;family&#39;] == &#39;Debian&#39; {
-    # Rebuild resolv.conf when the template files change.
-    service { &#39;resolvconf&#39;:
+  if $use_systemd_resolved {
+    service { &#39;systemd-resolved&#39;:
       ensure    =&gt; &#39;running&#39;,
       enable    =&gt; true,
-      subscribe =&gt; Class[&#39;::resolvconf::config&#39;]
+      subscribe =&gt; Class[&#39;resolvconf::config&#39;],
     }
   }
 }</pre>
